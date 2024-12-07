@@ -1,18 +1,24 @@
 #include "../include/color.h"
 #include "../include/ray.h"
 #include "../include/vec3.h"
+#include <cmath>
 #include <ostream>
 
 // Fonction booleenne qui renvoie true sur le rayon touche
 // la sphere dont on done le centre et le rayon
-bool hit_sphere(const point3& center, double radius, const ray& r) {
+double hit_sphere(const point3& center, double radius, const ray& r) {
   // calcul basé sur la résolution d'un système
   vec3 aux = center - r.origin();
-  double a = dot(r.direction(), r.direction());
-  double b = -2 * dot(r.direction(), aux);
-  double c = dot(aux, aux) - radius * radius;
-  double discr = b * b - 4 * a * c;
-  return discr >= 0;
+  double a = r.direction().length_squarred();
+  double h = dot(r.direction(), aux);
+  double c = aux.length_squarred() - radius * radius;
+  double discr = h * h - a * c;
+
+  if (discr < 0) {
+    return -1;
+  } else {
+    return (h - std::sqrt(discr)) / a;
+  }
 }
 
 color ray_color(const ray& r) {
@@ -21,8 +27,13 @@ color ray_color(const ray& r) {
   color blue = color(0, 0, 1);
   color red = color(1, 0, 0);
 
-  if (hit_sphere(point3(0, 0, -1), 0.5, r)) {
-    return red;
+  point3 center = point3(0, 0, -1);
+  double radius = 0.5;
+
+  double res = hit_sphere(center, radius, r);
+  if (res >= 0) {
+    vec3 normal = unit_vector(r.at(res) - center);
+    return 0.5 * (normal + vec3(1, 1, 1));
   }
 
   vec3 unit = unit_vector(r.direction());
@@ -37,11 +48,11 @@ int main() {
   int image_width = 400;
 
   int image_height = int(image_width / ratio);
-  image_height = image_height < 1 ? 1 : image_height;
+  image_height = (image_height < 1) ? 1 : image_height;
 
   // Définition de la largeur et de la hauteur du viewport
-  int viewport_height = 2.0;
-  int viewport_width = viewport_height * (double(image_width) / image_height);
+  float viewport_height = 2.0;
+  float viewport_width = viewport_height * (double(image_width) / image_height);
 
   // Paramètres liés à la caméra
   // la longueur de focal est la distance entre l'oeil et l'écran
@@ -66,7 +77,7 @@ int main() {
   point3 viewport_upper_left = camera_center - vec3(0, 0, focal_length) -
                                viewport_v / 2 - viewport_u / 2;
   point3 pixel00_loc =
-      viewport_upper_left + pixel_delta_v / 2 + pixel_delta_u / 2;
+      viewport_upper_left + 0.5 * (pixel_delta_v + pixel_delta_u);
 
   // Entete du fichier PPM
   std::cout << "P3" << std::endl
@@ -75,7 +86,7 @@ int main() {
 
   std::clog << "Début de la génération de l'image" << std::flush;
   for (int j = 0; j < image_height; j++) {
-    std::clog << "Génération de la ligne " << j << std::endl;
+    // std::clog << "Génération de la ligne " << j << std::endl;
     for (int i = 0; i < image_width; i++) {
 
       point3 current_pixel_center =
