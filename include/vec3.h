@@ -1,6 +1,7 @@
 #ifndef VEC3_H
 #define VEC3_H
 
+#include "utils.h"
 #include <cmath>
 #include <iostream>
 class vec3 {
@@ -53,6 +54,15 @@ public:
     return vector[0] * vector[0] + vector[1] * vector[1] +
            vector[2] * vector[2];
   }
+
+  static vec3 random() {
+    return vec3(random_double(), random_double(), random_double());
+  }
+
+  static vec3 random(double min, double max) {
+    return vec3(random_double(min, max), random_double(min, max),
+                random_double(min, max));
+  }
 };
 
 // C'est juste un alias, pour que le code soit plus claire à lire
@@ -84,7 +94,7 @@ inline vec3 operator*(const vec3& v1, double val) {
 
 inline vec3 operator*(double val, const vec3& v1) { return v1 * val; }
 
-inline vec3 operator/(const vec3& v1, double val) { return v1 * ( 1 / val ); }
+inline vec3 operator/(const vec3& v1, double val) { return v1 * (1 / val); }
 
 // Produit scalaire
 inline double dot(const vec3& v1, const vec3& v2) {
@@ -99,5 +109,26 @@ inline vec3 cross(const vec3& v1, const vec3& v2) {
 }
 
 inline vec3 unit_vector(const vec3& v) { return v / v.length(); }
+
+inline vec3 random_unit_vector() {
+  while (true) {
+    vec3 v = vec3::random(-1, 1);
+    double length_squarred = v.length_squarred();
+    if (1e-160 < length_squarred && length_squarred < 1) {
+      return v / sqrt(length_squarred);
+    }
+    // sinon on recommence, methode par rejection
+  }
+}
+
+inline vec3 random_on_hemisphere(const vec3& normal) {
+
+  vec3 unit_v = random_unit_vector();
+  if (dot(unit_v, normal) > 0) {
+    return unit_v;
+  } else {
+    return -unit_v;
+  }
+}
 
 #endif // !VEC3_H

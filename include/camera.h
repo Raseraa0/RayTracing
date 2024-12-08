@@ -24,11 +24,14 @@ private:
   color ray_color(const ray& r, const hittable& world) {
 
     color white = color(1, 1, 1);
-    color blue = color(0, 0, 1);
+    color blue = color(0.8, 0.8, 1);
 
     hit_record rec;
     if (world.hit(r, interval(0, infinity), rec)) {
-      return 0.5 * (rec.normal + vec3(1, 1, 1));
+      // Le rayon qui touche une surface est alors réfléchie, et donc il renvoie
+      // ce qui est touché par le rayon réfléchie
+      vec3 reflexion_direction = random_on_hemisphere(rec.normal);
+      return 0.5 * ray_color(ray(rec.p, reflexion_direction), world);
     }
 
     vec3 unit = unit_vector(r.direction());
