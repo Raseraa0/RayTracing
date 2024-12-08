@@ -1,6 +1,6 @@
-#include "../include/color.h"
-#include "../include/ray.h"
-#include "../include/vec3.h"
+#include "../include/color.h"  
+#include "../include/ray.h"  
+#include "../include/vec3.h" 
 #include <cmath>
 #include <ostream>
 
@@ -17,18 +17,19 @@ double hit_sphere(const point3& center, double radius, const ray& r) {
   if (discr < 0) {
     return -1;
   } else {
-    return (h - std::sqrt(discr)) / a;
+    return (h + std::sqrt(discr)) / a;
   }
 }
 
+// Renvoie la couleur touché par ce rayon
 color ray_color(const ray& r) {
 
   color white = color(1, 1, 1);
   color blue = color(0, 0, 1);
   color red = color(1, 0, 0);
 
-  point3 center = point3(0, 0, -1);
-  double radius = 0.5;
+  point3 center = point3(0, 0, -10);
+  double radius = 5;
 
   double res = hit_sphere(center, radius, r);
   if (res >= 0) {
@@ -83,8 +84,8 @@ int main() {
   std::cout << "P3" << std::endl
             << image_width << " " << image_height << std::endl
             << "255" << std::endl;
-
-  std::clog << "Début de la génération de l'image" << std::flush;
+  
+  std::clog << "Début de la génération de l'image" << std::endl;
   for (int j = 0; j < image_height; j++) {
     // std::clog << "Génération de la ligne " << j << std::endl;
     for (int i = 0; i < image_width; i++) {
