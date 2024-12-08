@@ -104,9 +104,12 @@ public:
               << image_width << " " << image_height << std::endl
               << "255" << std::endl;
 
-    std::clog << "Début de la génération de l'image" << std::endl;
+    std::clog << "Début du Render..." << std::endl;
+    int step = image_height / 10;
     for (int j = 0; j < image_height; j++) {
-      // std::clog << "Génération de la ligne " << j << std::endl;
+      if (j % step == 0) {
+        std::clog << "Lignes génerées : " << j / step * 10 << "%" << std::endl;
+      }
       for (int i = 0; i < image_width; i++) {
 
         color pixel_color(0, 0, 0);
@@ -118,7 +121,7 @@ public:
         write_color(std::cout, pixel_color * pixel_sample_scale);
       }
     }
-    std::clog << "Fin de la génération de l'image" << std::endl;
+    std::clog << "Fin du Render !!!" << std::endl;
   }
 };
 
