@@ -2,6 +2,7 @@
 #define SPHERE_H
 
 #include "hittable.h"
+#include "interval.h"
 #include "ray.h"
 #include "vec3.h"
 
@@ -14,8 +15,7 @@ public:
   sphere(const point3& center, double radius)
       : center(center), radius(std::fmax(0, radius)) {}
 
-  bool hit(const ray& r, double ray_tmin, double ray_tmax,
-           hit_record& rec) const override {
+  bool hit(const ray& r, interval ray_t, hit_record& rec) const override {
 
     // résolu par un système
     vec3 aux = center - r.origin();
@@ -32,12 +32,13 @@ public:
 
     double root = (h - discr_squarred) / a;
 
-    // Si la première racine n'est pas dans l'interval accepté
-    if (root <= ray_tmin || root >= ray_tmax) {
+    // la première racine est la plus proche, si elle est dans l'intervall:
+    // super sinon on regarde si la deuxième, un peu plus loin est dans
+    // l'intervalle
+    if (!ray_t.surrounds(root)) {
 
       root = (h + discr_squarred) / a;
-      // Si la deuxième racine n'est pas dans l'interval accepté
-      if (root <= ray_tmin || root >= ray_tmax) {
+      if (!ray_t.surrounds(root)) {
         return false;
       }
     }

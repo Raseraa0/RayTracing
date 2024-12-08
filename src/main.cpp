@@ -1,40 +1,28 @@
-#include "../include/color.h"  
-#include "../include/ray.h"  
-#include "../include/vec3.h" 
+#include "../include/color.h"
+#include "../include/hittable.h"
+#include "../include/hittable_list.h"
+#include "../include/interval.h"
+#include "../include/ray.h"
+#include "../include/sphere.h"
+#include "../include/utils.h"
+#include "../include/vec3.h"
+
 #include <cmath>
+#include <memory>
 #include <ostream>
 
-// Fonction booleenne qui renvoie true sur le rayon touche
-// la sphere dont on done le centre et le rayon
-double hit_sphere(const point3& center, double radius, const ray& r) {
-  // calcul basé sur la résolution d'un système
-  vec3 aux = center - r.origin();
-  double a = r.direction().length_squarred();
-  double h = dot(r.direction(), aux);
-  double c = aux.length_squarred() - radius * radius;
-  double discr = h * h - a * c;
-
-  if (discr < 0) {
-    return -1;
-  } else {
-    return (h + std::sqrt(discr)) / a;
-  }
-}
+using std::make_shared;
+using std::shared_ptr;
 
 // Renvoie la couleur touché par ce rayon
-color ray_color(const ray& r) {
+color ray_color(const ray& r, const hittable& world) {
 
   color white = color(1, 1, 1);
   color blue = color(0, 0, 1);
-  color red = color(1, 0, 0);
 
-  point3 center = point3(0, 0, -10);
-  double radius = 5;
-
-  double res = hit_sphere(center, radius, r);
-  if (res >= 0) {
-    vec3 normal = unit_vector(r.at(res) - center);
-    return 0.5 * (normal + vec3(1, 1, 1));
+  hit_record rec;
+  if (world.hit(r, interval(0, infinity), rec)) {
+    return 0.5 * (rec.normal + vec3(1, 1, 1));
   }
 
   vec3 unit = unit_vector(r.direction());
@@ -42,6 +30,7 @@ color ray_color(const ray& r) {
   return (1 - a) * white + a * blue;
 }
 
+// Main
 int main() {
 
   // Définition de la largeur et de la hauteur de l'image
@@ -80,11 +69,16 @@ int main() {
   point3 pixel00_loc =
       viewport_upper_left + 0.5 * (pixel_delta_v + pixel_delta_u);
 
+  // Ici on va décrire le monde, en ajoutant les objets que l'on souhaite
+  hittable_list world;
+  world.add(make_shared<sphere>(point3(0, 0, -1), 0.5));
+  world.add(make_shared<sphere>(point3(0, -100.5, -1), 100));
+
   // Entete du fichier PPM
   std::cout << "P3" << std::endl
             << image_width << " " << image_height << std::endl
             << "255" << std::endl;
-  
+
   std::clog << "Début de la génération de l'image" << std::endl;
   for (int j = 0; j < image_height; j++) {
     // std::clog << "Génération de la ligne " << j << std::endl;
@@ -95,7 +89,7 @@ int main() {
       vec3 ray_direction = current_pixel_center - camera_center;
       ray r = ray(camera_center, ray_direction);
 
-      color pixel_color = ray_color(r);
+      color pixel_color = ray_color(r, world);
 
       write_color(std::cout, pixel_color);
     }
