@@ -10,6 +10,7 @@ class camera {
 public:
   int image_width = 100;
   double ratio = 1.0;
+  int sample_per_pixel = 10;
 
 private:
   int image_height;
@@ -17,6 +18,7 @@ private:
   point3 pixel00_loc;
   vec3 pixel_delta_v;
   vec3 pixel_delta_u;
+  double pixel_sample_scale;
 
   // Renvoie la couleur touché par ce rayon
   color ray_color(const ray& r, const hittable& world) {
@@ -37,8 +39,9 @@ private:
   // Permet de mettre a jour tout les parametres de la camera
   void initialize() {
 
-    // Définition de la largeur et de la hauteur de l'image
+    pixel_sample_scale = 1.0 / sample_per_pixel;
 
+    // Définition de la largeur et de la hauteur de l'image
     image_height = int(image_width / ratio);
     image_height = (image_height < 1) ? 1 : image_height;
 
@@ -72,6 +75,22 @@ private:
     pixel00_loc = viewport_upper_left + 0.5 * (pixel_delta_v + pixel_delta_u);
   }
 
+  ray get_ray(int i, int j) const {
+    vec3 offset = sample_square();
+
+    point3 pixel_sample_loc = pixel00_loc + ((i + offset.x()) * pixel_delta_u) +
+                              ((j + offset.y()) * pixel_delta_v);
+
+    vec3 ray_direction = pixel_sample_loc - camera_center;
+
+    return ray(camera_center, ray_direction);
+  }
+
+  // return une position random sur un carré de 1 sur 1 centré en 0
+  vec3 sample_square() const {
+    return vec3(random_double() - 0.5, random_double() - 0.5, 0);
+  }
+
 public:
   void render(const hittable& world) {
 
@@ -87,13 +106,13 @@ public:
       // std::clog << "Génération de la ligne " << j << std::endl;
       for (int i = 0; i < image_width; i++) {
 
-        point3 current_pixel_center =
-            pixel00_loc + (i * pixel_delta_u) + (j * pixel_delta_v);
-        vec3 ray_direction = current_pixel_center - camera_center;
-        ray r = ray(camera_center, ray_direction);
+        color pixel_color(0, 0, 0);
+        for (int sample = 0; sample < sample_per_pixel; sample++) {
+          ray r = get_ray(i, j);
+          pixel_color += ray_color(r, world);
+        }
 
-        color pixel_color = ray_color(r, world);
-        write_color(std::cout, pixel_color);
+        write_color(std::cout, pixel_color * pixel_sample_scale);
       }
     }
     std::clog << "Fin de la génération de l'image" << std::endl;
