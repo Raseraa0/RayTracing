@@ -93,7 +93,6 @@ public:
         ray r = ray(camera_center, ray_direction);
 
         color pixel_color = ray_color(r, world);
-std::clog << "OOOOOO" << std::endl;
         write_color(std::cout, pixel_color);
       }
     }
