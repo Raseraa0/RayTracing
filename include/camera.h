@@ -11,6 +11,7 @@ public:
   int image_width = 100;
   double ratio = 1.0;
   int sample_per_pixel = 10;
+  int max_depth = 10;
 
 private:
   int image_height;
@@ -21,17 +22,22 @@ private:
   double pixel_sample_scale;
 
   // Renvoie la couleur touché par ce rayon
-  color ray_color(const ray& r, const hittable& world) {
+  color ray_color(const ray& r, int depth, const hittable& world) {
+
+    // just une limite pour pas que la fonction récursive explose
+    if (depth <= 0) {
+      return color(0, 0, 0);
+    }
 
     color white = color(1, 1, 1);
-    color blue = color(0.8, 0.8, 1);
+    color blue = color(0.2, 0.4, 1);
 
     hit_record rec;
-    if (world.hit(r, interval(0, infinity), rec)) {
+    if (world.hit(r, interval(0.001, infinity), rec)) {
       // Le rayon qui touche une surface est alors réfléchie, et donc il renvoie
       // ce qui est touché par le rayon réfléchie
       vec3 reflexion_direction = random_on_hemisphere(rec.normal);
-      return 0.5 * ray_color(ray(rec.p, reflexion_direction), world);
+      return 0.5 * ray_color(ray(rec.p, reflexion_direction), depth - 1, world);
     }
 
     vec3 unit = unit_vector(r.direction());
@@ -56,7 +62,7 @@ private:
     // Paramètres liés à la caméra
     // la longueur de focal est la distance entre l'oeil et l'écran
     // le camera center représente l'oeil
-    double focal_length = 1.0;
+    double focal_length = 1;
     camera_center = point3(0, 0, 0);
 
     // Vecteur qui parcours la largeur et la hauteur du viewport
@@ -115,7 +121,7 @@ public:
         color pixel_color(0, 0, 0);
         for (int sample = 0; sample < sample_per_pixel; sample++) {
           ray r = get_ray(i, j);
-          pixel_color += ray_color(r, world);
+          pixel_color += ray_color(r, max_depth, world);
         }
 
         write_color(std::cout, pixel_color * pixel_sample_scale);
