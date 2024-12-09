@@ -1,7 +1,6 @@
 #ifndef VEC3_H
 #define VEC3_H
 
-#include "utils.h"
 #include <cmath>
 #include <iostream>
 class vec3 {
@@ -10,59 +9,41 @@ public:
   double vector[3];
 
   // Constructeurs
-  vec3(double x, double y, double z) : vector{x, y, z} {}
-  vec3() : vector{0, 0, 0} {}
+  vec3(double x, double y, double z);
+  vec3();
 
   // Getteur
-  double x() const { return vector[0]; }
-  double y() const { return vector[1]; }
-  double z() const { return vector[2]; }
+  double x() const;
+  double y() const;
+  double z() const;
 
   // Overload d'opérateur
-  vec3 operator-() const { return vec3(-vector[0], -vector[1], -vector[2]); }
+  vec3 operator-() const;
 
-  double operator[](int i) const {
-    return vector[i];
-  } // Pour les cas mon_int = mon_vec[1]
+  double operator[](int i) const; // Pour les cas mon_int = mon_vec[1]
 
-  double& operator[](int i) {
-    return vector[i];
-  } // Pour les cas mon_vec[1] = mon_int
+  double& operator[](int i); // Pour les cas mon_vec[1] = mon_int
 
-  vec3& operator+=(const vec3& other) {
-    vector[0] += other.vector[0];
-    vector[1] += other.vector[1];
-    vector[2] += other.vector[2];
-    return *this;
-  }
+  vec3& operator+=(const vec3& other);
 
-  vec3& operator-=(const vec3& other) { return *this += (-other); }
+  vec3& operator-=(const vec3& other);
 
-  vec3& operator*=(double val) {
-    vector[0] *= val;
-    vector[1] *= val;
-    vector[2] *= val;
-    return *this;
-  }
+  vec3& operator*=(double val);
 
-  vec3& operator/=(double val) { return *this *= 1 / val; }
+  vec3& operator/=(double val);
 
   // Calcul de la longueur du vecteur
-  double length() const { return std::sqrt(length_squarred()); }
+  double length() const;
 
-  double length_squarred() const {
-    return vector[0] * vector[0] + vector[1] * vector[1] +
-           vector[2] * vector[2];
-  }
+  double length_squarred() const;
 
-  static vec3 random() {
-    return vec3(random_double(), random_double(), random_double());
-  }
+  // C'est surement + compliqué que ca mais on va dire je privilégie static
+  // quand c'est utilisé dans la classe et inline quand c'est utilisé en dehors
+  // de la classe
+  static vec3 random();
 
-  static vec3 random(double min, double max) {
-    return vec3(random_double(min, max), random_double(min, max),
-                random_double(min, max));
-  }
+  static vec3 random(double min, double max);
+
 };
 
 // C'est juste un alias, pour que le code soit plus claire à lire

@@ -11,15 +11,15 @@ private:
 
 public:
   // Constructeurs
-  ray() {}
-  ray(const point3& o, const vec3& d) : orig(o), dir(d) {}
+  ray();
+  ray(const point3& o, const vec3& d);
 
   // getteur
-  const point3& origin() const { return orig; }
-  const point3& direction() const { return dir; }
+  const point3& origin() const; 
+  const point3& direction() const; 
 
   // calcul d'un point sur le ray
-  point3 at(double t) const { return orig + t * dir; }
+  point3 at(double t) const; 
 };
 
 #endif // !RAY_H
