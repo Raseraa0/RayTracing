@@ -33,7 +33,7 @@ public:
     bool hit_anything = false;
     double ray_tmax_aux = ray_t.max;
 
-    for (const shared_ptr<hittable> elem : array) {
+    for (const shared_ptr<hittable>& elem : array) {
 
       // On cherche entre le min et le max
       // Puis on cherche entre le min et la distance de l'object le plus proche
