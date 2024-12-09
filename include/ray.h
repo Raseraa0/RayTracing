@@ -12,7 +12,7 @@ private:
 public:
   // Constructeurs
   ray() {}
-  ray(const point3& orig, const vec3& dir) : orig(orig), dir(dir) {}
+  ray(const point3& o, const vec3& d) : orig(o), dir(d) {}
 
   // getteur
   const point3& origin() const { return orig; }

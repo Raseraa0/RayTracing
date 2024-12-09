@@ -8,7 +8,7 @@ public:
 
   interval() : min(infinity), max(-infinity) {}
 
-  interval(double min, double max) : min(min), max(max) {}
+  interval(double m1, double m2) : min(m1), max(m2) {}
 
   bool containt(double x) const { return min <= x && x <= max; }
 

@@ -15,7 +15,7 @@ file(
 )
 
 set(CMAKE_CXX_FLAGS
-    "-O3 -Wall -Wextra -Werror -Wpedantic -Wconversion -Wsign-conversion -Wshadow"
+    "-O3 -Wall -Wextra -Wpedantic -Werror -Wconversion -Wsign-conversion -Wshadow"
 )
 
 add_executable(

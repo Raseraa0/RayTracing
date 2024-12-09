@@ -12,8 +12,8 @@ private:
   double radius;
 
 public:
-  sphere(const point3& center, double radius)
-      : center(center), radius(std::fmax(0, radius)) {}
+  sphere(const point3& c, double r)
+      : center(c), radius(std::fmax(0, r)) {}
 
   bool hit(const ray& r, interval ray_t, hit_record& rec) const override {
 

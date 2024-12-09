@@ -55,8 +55,8 @@ private:
     image_height = (image_height < 1) ? 1 : image_height;
 
     // Définition de la largeur et de la hauteur du viewport
-    float viewport_height = 2.0;
-    float viewport_width =
+    double viewport_height = 2.0;
+    double viewport_width =
         viewport_height * (double(image_width) / image_height);
 
     // Paramètres liés à la caméra
