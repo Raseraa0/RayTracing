@@ -29,8 +29,8 @@ private:
       return color(0, 0, 0);
     }
 
-    color white = color(1, 1, 1);
-    color blue = color(0.2, 0.4, 1);
+    color white(1, 1, 1);
+    color blue(0.2, 0.4, 1);
 
     hit_record rec;
     if (world.hit(r, interval(0.001, infinity), rec)) {

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.22)
 
 project(RayTracing)
 
@@ -13,9 +13,10 @@ file(
   HEADERS
   "include/*.h"
 )
+set(CMAKE_CXX_COMPILER "/usr/bin/g++")
 
 set(CMAKE_CXX_FLAGS
-    "-O3 -Wall -Wextra -Wpedantic -Werror -Wconversion -Wsign-conversion -Wshadow"
+    "-O3 -Wall -Wextra -Wpedantic -Werror -Wconversion -Wsign-conversion -Wshadow" 
 )
 
 add_executable(
