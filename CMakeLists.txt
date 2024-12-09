@@ -28,12 +28,6 @@ add_compile_options(-Wreorder)
 add_compile_options(-Wmaybe-uninitialized)
 add_compile_options(-Wunused-variable)
 
-
-
-
-
-
-
 add_executable(
   raytracing
   ${SOURCES}
