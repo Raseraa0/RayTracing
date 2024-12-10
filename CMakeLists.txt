@@ -16,6 +16,7 @@ file(
 set(CMAKE_CXX_COMPILER "/usr/bin/g++")
 
 add_compile_options(-O3)
+add_compile_options(-flto)
 add_compile_options(-Wall)
 add_compile_options(-Wextra)
 add_compile_options(-Wpedantic)
