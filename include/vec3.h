@@ -37,13 +37,14 @@ public:
 
   double length_squarred() const;
 
+  bool near_zero() const;
+
   // C'est surement + compliqué que ca mais on va dire je privilégie static
   // quand c'est utilisé dans la classe et inline quand c'est utilisé en dehors
   // de la classe
   static vec3 random();
 
   static vec3 random(double min, double max);
-
 };
 
 // C'est juste un alias, pour que le code soit plus claire à lire
@@ -110,6 +111,10 @@ inline vec3 random_on_hemisphere(const vec3& normal) {
   } else {
     return -unit_v;
   }
+}
+
+inline vec3 reflect(const vec3& v, const vec3& normal) {
+  return v - 2 * dot(v, normal) * normal;
 }
 
 #endif // !VEC3_H

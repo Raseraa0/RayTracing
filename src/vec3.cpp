@@ -47,6 +47,12 @@ double vec3::length_squarred() const {
   return vector[0] * vector[0] + vector[1] * vector[1] + vector[2] * vector[2];
 }
 
+bool vec3::near_zero() const {
+  double s = 1e-8;
+  return (std::fabs(vector[0]) < s && std::fabs(vector[1]) < s &&
+          std::fabs(vector[2]) < s);
+}
+
 // C'est surement + compliqué que ca mais on va dire je privilégie static
 // quand c'est utilisé dans la classe et inline quand c'est utilisé en dehors
 // de la classe
@@ -58,4 +64,3 @@ vec3 vec3::random(double min, double max) {
   return vec3(random_double(min, max), random_double(min, max),
               random_double(min, max));
 }
-

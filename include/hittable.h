@@ -4,6 +4,11 @@
 #include "interval.h"
 #include "ray.h"
 #include "vec3.h"
+#include <memory>
+
+using std::shared_ptr;
+
+class material;
 
 // Classe qui va servir a enregistré des données
 class hit_record {
@@ -12,6 +17,7 @@ public:
   double t;
   vec3 normal;
   bool front_face;
+  shared_ptr<material> mat;
 
   // Pour des raison pratique, le vecteur normal doit toujours
   // aller à l'encontre du rayo

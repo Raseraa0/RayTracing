@@ -1,10 +1,11 @@
 #include "../include/camera.h"
 #include "../include/utils.h"
+#include "../include/material.h"
 
 // Renvoie la couleur touché par ce rayon
 color camera::ray_color(const ray& r, int depth, const hittable& world) {
 
-  // just une limite pour pas que la fonction récursive explose
+  // juste une limite pour pas que la fonction récursive explose
   if (depth <= 0) {
     return color(0, 0, 0);
   }
@@ -14,10 +15,15 @@ color camera::ray_color(const ray& r, int depth, const hittable& world) {
 
   hit_record rec;
   if (world.hit(r, interval(0.001, infinity), rec)) {
-    // Le rayon qui touche une surface est alors réfléchie, et donc il renvoie
-    // ce qui est touché par le rayon réfléchie
-    vec3 reflexion_direction = random_on_hemisphere(rec.normal);
-    return 0.5 * ray_color(ray(rec.p, reflexion_direction), depth - 1, world);
+
+    ray scattered;
+    color attenuation;
+    if (rec.mat->scatter(r, rec, attenuation, scattered)) {
+
+      return attenuation * ray_color(scattered, depth - 1, world);
+    }
+
+    return color(0, 0, 0);
   }
 
   vec3 unit = unit_vector(r.direction());
@@ -108,4 +114,3 @@ void camera::render(const hittable& world) {
   }
   std::clog << "Fin du Render !!!" << std::endl;
 }
-

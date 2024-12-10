@@ -1,7 +1,10 @@
 #include "../include/sphere.h"
 
-sphere::sphere(const point3& c, double r)
-    : center(c), radius(std::fmax(0, r)) {}
+sphere::sphere(const point3& c, double r, shared_ptr<material> m)
+    : center(c), radius(std::fmax(0, r)) {
+  // TODO initialiser mat
+  mat = m;
+}
 
 bool sphere::hit(const ray& r, interval ray_t, hit_record& rec) const {
 
@@ -34,6 +37,7 @@ bool sphere::hit(const ray& r, interval ray_t, hit_record& rec) const {
   rec.t = root;
   rec.p = r.at(root);
   rec.normal = (rec.p - center) / radius;
+  rec.mat = mat;
 
   return true;
 }
