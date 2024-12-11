@@ -1,7 +1,7 @@
-#include "../include/interval.h"
-#include "../include/utils.h"
+#include "interval.h"
+#include "utils.h"
 
-interval::interval() : min(infinity), max(-infinity) {}
+interval::interval() : min(utils::infinity), max(-utils::infinity) {}
 
 interval::interval(double m1, double m2) : min(m1), max(m2) {}
 
@@ -22,5 +22,5 @@ double interval::clamp(double x) const {
 
 double interval::size() const { return max - min; }
 
-const interval interval::empty = interval(infinity, -infinity);
-const interval interval::universe = interval(-infinity, infinity);
+const interval interval::empty = interval(utils::infinity, -utils::infinity);
+const interval interval::universe = interval(-utils::infinity, utils::infinity);

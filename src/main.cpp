@@ -1,7 +1,7 @@
-#include "../include/camera.h"
-#include "../include/hittable_list.h"
-#include "../include/sphere.h"
-#include "../include/vec3.h"
+#include "camera.h"
+#include "hittable_list.h"
+#include "sphere.h"
+#include "vec3.h"
 
 #include <cmath>
 #include <memory>
@@ -18,8 +18,8 @@ int main() {
 
     for (int a = -11; a < 11; a++) {
         for (int b = -11; b < 11; b++) {
-            auto choose_mat = random_double();
-            point3 center(a + 0.9*random_double(), 0.2, b + 0.9*random_double());
+            auto choose_mat = utils::random_double();
+            point3 center(a + 0.9*utils::random_double(), 0.2, b + 0.9*utils::random_double());
 
             if ((center - point3(4, 0.2, 0)).length() > 0.9) {
                 shared_ptr<material> sphere_material;
@@ -32,7 +32,7 @@ int main() {
                 } else if (choose_mat < 0.95) {
                     // metal
                     auto albedo = color::random(0.5, 1);
-                    auto fuzz = random_double(0, 0.5);
+                    auto fuzz = utils::random_double(0, 0.5);
                     sphere_material = make_shared<metal>(albedo, fuzz);
                     world.add(make_shared<sphere>(center, 0.2, sphere_material));
                 } else {
@@ -56,8 +56,8 @@ int main() {
     camera cam;
 
     cam.ratio      = 16.0 / 9.0;
-    cam.image_width       = 1200;
-    cam.sample_per_pixel = 100;
+    cam.image_width       = 400;
+    cam.sample_per_pixel = 50;
     cam.max_depth         = 50;
 
     cam.vfov     = 20;

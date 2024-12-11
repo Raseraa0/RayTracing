@@ -1,4 +1,4 @@
-#include "../include/material.h"
+#include "material.h"
 #include <cmath>
 
 // par defaut on va dire qu'on renvoie just false
@@ -23,7 +23,7 @@ bool lambertian::scatter(const ray& r, const hit_record& rec,
 
   (void)r;
 
-  vec3 scattered_direction = rec.normal + random_unit_vector();
+  vec3 scattered_direction = rec.normal + geometry::random_unit_vector();
 
   if (scattered_direction.near_zero()) {
     scattered_direction = rec.normal;
@@ -36,13 +36,13 @@ bool lambertian::scatter(const ray& r, const hit_record& rec,
 
 bool metal::scatter(const ray& r, const hit_record& rec, color& attenuation,
                     ray& scattered) const {
-  vec3 scattered_direction = reflect(r.direction(), rec.normal);
+  vec3 scattered_direction = geometry::reflect(r.direction(), rec.normal);
   scattered_direction =
-      unit_vector(scattered_direction) + fuzz * random_unit_vector();
+      geometry::unit_vector(scattered_direction) + fuzz * geometry::random_unit_vector();
 
   scattered = ray(rec.p, scattered_direction);
   attenuation = albedo;
-  return dot(scattered_direction, rec.normal) > 0;
+  return geometry::dot(scattered_direction, rec.normal) > 0;
 }
 
 bool dielectric::scatter(const ray& r, const hit_record& rec,
@@ -53,8 +53,8 @@ bool dielectric::scatter(const ray& r, const hit_record& rec,
   // ou si on est dans la matière et que l'on sort dans l'air
   double ri = rec.front_face ? (1.0 / reflexion_index) : reflexion_index;
 
-  vec3 direction_unit = unit_vector(r.direction());
-  double cos_theta = std::fmin(dot(-direction_unit, rec.normal), 1.0);
+  vec3 direction_unit = geometry::unit_vector(r.direction());
+  double cos_theta = std::fmin(geometry::dot(-direction_unit, rec.normal), 1.0);
   double sin_theta = std::sqrt(1.0 - cos_theta * cos_theta);
 
   // Cette condition est du au loi de snell descarts
@@ -63,9 +63,9 @@ bool dielectric::scatter(const ray& r, const hit_record& rec,
   vec3 direction;
 
   if (cant_refract) {
-    direction = reflect(direction_unit, rec.normal);
+    direction = geometry::reflect(direction_unit, rec.normal);
   } else {
-    direction = refract(direction_unit, rec.normal, ri);
+    direction = geometry::refract(direction_unit, rec.normal, ri);
   }
 
   scattered = ray(rec.p, direction);

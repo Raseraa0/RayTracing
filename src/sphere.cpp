@@ -1,4 +1,4 @@
-#include "../include/sphere.h"
+#include "sphere.h"
 
 sphere::sphere(const point3& c, double r, shared_ptr<material> m)
     : center(c), radius(std::fmax(0, r)) {
@@ -11,7 +11,7 @@ bool sphere::hit(const ray& r, interval ray_t, hit_record& rec) const {
   // résolu par un système
   vec3 aux = center - r.origin();
   double a = r.direction().length_squarred();
-  double h = dot(r.direction(), aux);
+  double h = geometry::dot(r.direction(), aux);
   double c = aux.length_squarred() - radius * radius;
   double discr = h * h - a * c;
 

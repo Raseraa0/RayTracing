@@ -1,6 +1,6 @@
-#include "../include/camera.h"
-#include "../include/material.h"
-#include "../include/utils.h"
+#include "camera.h"
+#include "material.h"
+#include "utils.h"
 #include <ostream>
 
 // Renvoie la couleur touché par ce rayon
@@ -15,7 +15,7 @@ color camera::ray_color(const ray& r, int depth, const hittable& world) {
   color blue(0.2, 0.4, 1);
 
   hit_record rec;
-  if (world.hit(r, interval(0.001, infinity), rec)) {
+  if (world.hit(r, interval(0.001, utils::infinity), rec)) {
 
     ray scattered;
     color attenuation;
@@ -30,7 +30,7 @@ color camera::ray_color(const ray& r, int depth, const hittable& world) {
     return color(0, 0, 0);
   }
 
-  vec3 unit = unit_vector(r.direction());
+  vec3 unit = geometry::unit_vector(r.direction());
   double a = 0.5 * (unit.y() + 1);
   return (1 - a) * white + a * blue;
 }
@@ -50,15 +50,15 @@ void camera::initialize() {
   camera_center = lookfrom;
 
   // Définition de la largeur et de la hauteur du viewport
-  double theta = degrees_to_radians(vfov);
+  double theta = utils::degrees_to_radians(vfov);
   double h = std::tan(theta / 2);
   double viewport_height = 2 * h * focus_distance;
   double viewport_width =
       viewport_height * (double(image_width) / image_height);
 
-  w = unit_vector(lookfrom - lookat);
-  u = unit_vector(cross(vup, w));
-  v = cross(w, u);
+  w = geometry::unit_vector(lookfrom - lookat);
+  u = geometry::unit_vector(geometry::cross(vup, w));
+  v = geometry::cross(w, u);
 
   // Vecteur qui parcours la largeur et la hauteur du viewport
   // On suppose le coin en haut a gauche le point de départ
@@ -79,7 +79,7 @@ void camera::initialize() {
   pixel00_loc = viewport_upper_left + 0.5 * (pixel_delta_v + pixel_delta_u);
 
   double defocus_ratio =
-      focus_distance * std::tan(degrees_to_radians(defocus_angle / 2));
+      focus_distance * std::tan(utils::degrees_to_radians(defocus_angle / 2));
 
   defocus_disk_u = defocus_ratio * u;
   defocus_disk_v = defocus_ratio * v;
@@ -101,7 +101,7 @@ ray camera::get_ray(int i, int j) const {
 
 // return une position random sur un carré de 1 sur 1 centré en 0
 vec3 camera::sample_square() const {
-  return vec3(random_double() - 0.5, random_double() - 0.5, 0);
+  return vec3(utils::random_double() - 0.5, utils::random_double() - 0.5, 0);
 }
 
 void camera::render(const hittable& world) {
@@ -127,13 +127,13 @@ void camera::render(const hittable& world) {
         pixel_color += ray_color(r, max_depth, world);
       }
 
-      write_color(std::cout, pixel_color * pixel_sample_scale);
+      coloration::write_color(std::cout, pixel_color * pixel_sample_scale);
     }
   }
   std::clog << "\nFin du Render !!!" << std::endl;
 }
 
 point3 camera::defocus_disk_sample() const {
-  vec3 p = random_on_unit_disk();
+  vec3 p = geometry::random_on_unit_disk();
   return camera_center + (p[0] * defocus_disk_u) + (p[1] * defocus_disk_v);
 }

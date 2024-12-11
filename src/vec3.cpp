@@ -1,5 +1,5 @@
-#include "../include/vec3.h"
-#include "../include/utils.h"
+#include "vec3.h"
+#include "utils.h"
 
 vec3::vec3(double x, double y, double z) : vector{x, y, z} {}
 vec3::vec3() : vector{0, 0, 0} {}
@@ -57,10 +57,10 @@ bool vec3::near_zero() const {
 // quand c'est utilisé dans la classe et inline quand c'est utilisé en dehors
 // de la classe
 vec3 vec3::random() {
-  return vec3(random_double(), random_double(), random_double());
+  return vec3(utils::random_double(), utils::random_double(), utils::random_double());
 }
 
 vec3 vec3::random(double min, double max) {
-  return vec3(random_double(min, max), random_double(min, max),
-              random_double(min, max));
+  return vec3(utils::random_double(min, max), utils::random_double(min, max),
+              utils::random_double(min, max));
 }

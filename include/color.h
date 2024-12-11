@@ -7,6 +7,8 @@
 
 using color = vec3;
 
+namespace coloration {
+
 // Fonction qui permet d'écrire un pixel de couleur sur un sortie
 // On suppose ici que le pixel de couleur contient des valeur entre 0 et 1
 void write_color(std::ostream& out, const color& pixel_color);
@@ -17,5 +19,6 @@ inline double linear_to_gamma(double x) {
   }
   return 0;
 }
+} // namespace color
 
 #endif // !COLOR_H

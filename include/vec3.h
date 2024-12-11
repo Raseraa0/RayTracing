@@ -79,6 +79,8 @@ inline vec3 operator*(double val, const vec3& v1) { return v1 * val; }
 
 inline vec3 operator/(const vec3& v1, double val) { return v1 * (1 / val); }
 
+namespace geometry {
+
 // Produit scalaire
 inline double dot(const vec3& v1, const vec3& v2) {
   return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2];
@@ -116,7 +118,7 @@ inline vec3 random_on_hemisphere(const vec3& normal) {
 
 inline vec3 random_on_unit_disk() {
   while (true) {
-    vec3 v = vec3(random_double(-1, 1), random_double(-1, 1), 0);
+    vec3 v = vec3(utils::random_double(-1, 1), utils::random_double(-1, 1), 0);
     if (v.length_squarred() < 1) {
       return v;
     }
@@ -134,5 +136,6 @@ inline vec3 refract(const vec3& v, const vec3& normal, double coef) {
       -std::sqrt(std::fabs(1.0 - perp_r_out.length_squarred())) * normal;
   return parall_r_out + perp_r_out;
 }
+} // namespace geometry
 
 #endif // !VEC3_H

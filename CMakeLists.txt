@@ -34,3 +34,5 @@ add_executable(
   ${SOURCES}
   ${HEADERS}
 )
+
+target_include_directories(raytracing PRIVATE include)
