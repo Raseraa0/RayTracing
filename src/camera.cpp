@@ -1,6 +1,7 @@
 #include "../include/camera.h"
 #include "../include/material.h"
 #include "../include/utils.h"
+#include <ostream>
 
 // Renvoie la couleur touché par ce rayon
 color camera::ray_color(const ray& r, int depth, const hittable& world) {
@@ -113,11 +114,11 @@ void camera::render(const hittable& world) {
             << "255" << std::endl;
 
   std::clog << "Début du Render..." << std::endl;
-  int step = image_height / 10;
   for (int j = 0; j < image_height; j++) {
-    if (j % step == 0) {
-      std::clog << "Lignes génerées : " << j / step * 10 << "%" << std::endl;
-    }
+
+    int percentage = static_cast<int>((j + 1) * 100.0 / image_height);
+    std::clog << "\rProgression : " << percentage << "%" << std::flush;
+
     for (int i = 0; i < image_width; i++) {
 
       color pixel_color(0, 0, 0);
@@ -129,7 +130,7 @@ void camera::render(const hittable& world) {
       write_color(std::cout, pixel_color * pixel_sample_scale);
     }
   }
-  std::clog << "Fin du Render !!!" << std::endl;
+  std::clog << "\nFin du Render !!!" << std::endl;
 }
 
 point3 camera::defocus_disk_sample() const {
