@@ -1,6 +1,7 @@
 #ifndef VEC3_H
 #define VEC3_H
 
+#include "utils.h"
 #include <cmath>
 #include <iostream>
 class vec3 {
@@ -110,6 +111,15 @@ inline vec3 random_on_hemisphere(const vec3& normal) {
     return unit_v;
   } else {
     return -unit_v;
+  }
+}
+
+inline vec3 random_on_unit_disk() {
+  while (true) {
+    vec3 v = vec3(random_double(-1, 1), random_double(-1, 1), 0);
+    if (v.length_squarred() < 1) {
+      return v;
+    }
   }
 }
 

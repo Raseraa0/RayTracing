@@ -46,13 +46,12 @@ void camera::initialize() {
   // Paramètres liés à la caméra
   // la longueur de focal est la distance entre l'oeil et l'écran
   // le camera center représente l'oeil
-  double focal_length = (lookfrom - lookat).length();
   camera_center = lookfrom;
 
   // Définition de la largeur et de la hauteur du viewport
   double theta = degrees_to_radians(vfov);
   double h = std::tan(theta / 2);
-  double viewport_height = 2 * h * focal_length;
+  double viewport_height = 2 * h * focus_distance;
   double viewport_width =
       viewport_height * (double(image_width) / image_height);
 
@@ -75,8 +74,14 @@ void camera::initialize() {
   // calcul du coin et du pixel tout en haut a gauche (donc le tout premier
   // pixel)
   point3 viewport_upper_left =
-      camera_center - focal_length * w - viewport_v / 2 - viewport_u / 2;
+      camera_center - focus_distance * w - viewport_v / 2 - viewport_u / 2;
   pixel00_loc = viewport_upper_left + 0.5 * (pixel_delta_v + pixel_delta_u);
+
+  double defocus_ratio =
+      focus_distance * std::tan(degrees_to_radians(defocus_angle / 2));
+
+  defocus_disk_u = defocus_ratio * u;
+  defocus_disk_v = defocus_ratio * v;
 }
 
 ray camera::get_ray(int i, int j) const {
@@ -85,9 +90,12 @@ ray camera::get_ray(int i, int j) const {
   point3 pixel_sample_loc = pixel00_loc + ((i + offset.x()) * pixel_delta_u) +
                             ((j + offset.y()) * pixel_delta_v);
 
-  vec3 ray_direction = pixel_sample_loc - camera_center;
+  point3 ray_origin =
+      defocus_angle <= 0 ? camera_center : defocus_disk_sample();
 
-  return ray(camera_center, ray_direction);
+  vec3 ray_direction = pixel_sample_loc - ray_origin;
+
+  return ray(ray_origin, ray_direction);
 }
 
 // return une position random sur un carré de 1 sur 1 centré en 0
@@ -122,4 +130,9 @@ void camera::render(const hittable& world) {
     }
   }
   std::clog << "Fin du Render !!!" << std::endl;
+}
+
+point3 camera::defocus_disk_sample() const {
+  vec3 p = random_on_unit_disk();
+  return camera_center + (p[0] * defocus_disk_u) + (p[1] * defocus_disk_v);
 }
