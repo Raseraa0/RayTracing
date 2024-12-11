@@ -6,12 +6,16 @@ file(
   GLOB
   SOURCES
   "src/*.cpp"
+  "src/Hittable/*.cpp"
+  "src/Material/*.cpp"
 )
 
 file(
   GLOB
   HEADERS
   "include/*.h"
+  "include/Hittable/*.h"
+  "include/Material/*.h"
 )
 set(CMAKE_CXX_COMPILER "/usr/bin/g++")
 

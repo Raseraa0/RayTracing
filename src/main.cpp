@@ -1,6 +1,9 @@
+#include "Material/dielectric.h"
+#include "Material/lambertian.h"
+#include "Material/metal.h"
 #include "camera.h"
-#include "hittable_list.h"
-#include "sphere.h"
+#include "Hittable/hittable_list.h"
+#include "Hittable/sphere.h"
 #include "vec3.h"
 
 #include <cmath>

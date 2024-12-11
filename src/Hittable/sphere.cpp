@@ -1,4 +1,4 @@
-#include "sphere.h"
+#include "Hittable/sphere.h"
 
 sphere::sphere(const point3& c, double r, shared_ptr<material> m)
     : center(c), radius(std::fmax(0, r)) {

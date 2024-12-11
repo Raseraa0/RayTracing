@@ -1,4 +1,4 @@
-#include "hittable.h"
+#include "Hittable/hittable.h"
 
 // Pour des raison pratique, le vecteur normal doit toujours
 // aller à l'encontre du rayo

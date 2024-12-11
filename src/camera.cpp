@@ -1,5 +1,5 @@
 #include "camera.h"
-#include "material.h"
+#include "Material/material.h"
 #include "utils.h"
 #include <ostream>
 
@@ -21,9 +21,6 @@ color camera::ray_color(const ray& r, int depth, const hittable& world) {
     color attenuation;
     if (rec.mat->scatter(r, rec, attenuation, scattered)) {
 
-      // if (rec.mat->id == 1){
-      //    std::clog << "" << std::endl;
-      //  }
       return attenuation * ray_color(scattered, depth - 1, world);
     }
 
