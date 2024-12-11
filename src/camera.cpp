@@ -1,6 +1,6 @@
 #include "../include/camera.h"
-#include "../include/utils.h"
 #include "../include/material.h"
+#include "../include/utils.h"
 
 // Renvoie la couleur touché par ce rayon
 color camera::ray_color(const ray& r, int depth, const hittable& world) {
@@ -20,6 +20,9 @@ color camera::ray_color(const ray& r, int depth, const hittable& world) {
     color attenuation;
     if (rec.mat->scatter(r, rec, attenuation, scattered)) {
 
+      // if (rec.mat->id == 1){
+      //    std::clog << "" << std::endl;
+      //  }
       return attenuation * ray_color(scattered, depth - 1, world);
     }
 
@@ -40,24 +43,30 @@ void camera::initialize() {
   image_height = int(image_width / ratio);
   image_height = (image_height < 1) ? 1 : image_height;
 
-  // Définition de la largeur et de la hauteur du viewport
-  double viewport_height = 2.0;
-  double viewport_width =
-      viewport_height * (double(image_width) / image_height);
-
   // Paramètres liés à la caméra
   // la longueur de focal est la distance entre l'oeil et l'écran
   // le camera center représente l'oeil
-  double focal_length = 1;
-  camera_center = point3(0, 0, 0);
+  double focal_length = (lookfrom - lookat).length();
+  camera_center = lookfrom;
+
+  // Définition de la largeur et de la hauteur du viewport
+  double theta = degrees_to_radians(vfov);
+  double h = std::tan(theta / 2);
+  double viewport_height = 2 * h * focal_length;
+  double viewport_width =
+      viewport_height * (double(image_width) / image_height);
+
+  w = unit_vector(lookfrom - lookat);
+  u = unit_vector(cross(vup, w));
+  v = cross(w, u);
 
   // Vecteur qui parcours la largeur et la hauteur du viewport
   // On suppose le coin en haut a gauche le point de départ
-  // l'axe x est la largeur
-  // l'axe y est la hauteur
-  // l'axe z est la profondeur
-  vec3 viewport_u = vec3(viewport_width, 0, 0);
-  vec3 viewport_v = vec3(0, -viewport_height, 0);
+  // l'axe x est la largeur (u)
+  // l'axe y est la hauteur (v)
+  // l'axe z est la profondeur (w)
+  vec3 viewport_u = viewport_width * u;
+  vec3 viewport_v = viewport_height * -v;
 
   // Vecteur qui représente la ditance entre le centre de chaque pixel
   pixel_delta_u = viewport_u / image_width;
@@ -65,8 +74,8 @@ void camera::initialize() {
 
   // calcul du coin et du pixel tout en haut a gauche (donc le tout premier
   // pixel)
-  point3 viewport_upper_left = camera_center - vec3(0, 0, focal_length) -
-                               viewport_v / 2 - viewport_u / 2;
+  point3 viewport_upper_left =
+      camera_center - focal_length * w - viewport_v / 2 - viewport_u / 2;
   pixel00_loc = viewport_upper_left + 0.5 * (pixel_delta_v + pixel_delta_u);
 }
 

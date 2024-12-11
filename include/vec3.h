@@ -117,4 +117,12 @@ inline vec3 reflect(const vec3& v, const vec3& normal) {
   return v - 2 * dot(v, normal) * normal;
 }
 
+inline vec3 refract(const vec3& v, const vec3& normal, double coef) {
+  double cos_theta = std::fmin(dot(-v, normal), 1.0);
+  vec3 perp_r_out = coef * (v + cos_theta * normal);
+  vec3 parall_r_out =
+      -std::sqrt(std::fabs(1.0 - perp_r_out.length_squarred())) * normal;
+  return parall_r_out + perp_r_out;
+}
+
 #endif // !VEC3_H

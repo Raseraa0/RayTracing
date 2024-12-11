@@ -7,7 +7,7 @@
 #include <memory>
 
 using std::make_shared;
-using std::shared_ptr;
+// using std::shared_ptr;
 
 // Main
 int main() {
@@ -15,25 +15,30 @@ int main() {
   // Description des objets
   hittable_list world;
 
-  shared_ptr<material> material_ground =
-      make_shared<lambertian>(color(0.8, 0.8, 0.0));
-  shared_ptr<material> material_center =
-      make_shared<lambertian>(color(0.1, 0.2, 0.5));
-  shared_ptr<material> material_left =
-      make_shared<metal>(color(0.8, 0.8, 0.8), 0);
-  shared_ptr<material> material_right =
-      make_shared<metal>(color(0.8, 0.6, 0.2), 0.05);
+  auto material_ground = make_shared<lambertian>(color(0.8, 0.8, 0.0));
+  auto material_solid = make_shared<lambertian>(color(0.1, 0.2, 0.5));
+  auto material_metal = make_shared<metal>(color(0.8, 0.8, 0.8), 0);
+  auto material_dielectric_outer = make_shared<dielectric>(1.50);
+  auto material_dielectric_inner = make_shared<dielectric>(1.00 / 1.50);
 
   world.add(make_shared<sphere>(point3(0, -100.5, -1), 100, material_ground));
-  world.add(make_shared<sphere>(point3(0, -0, -1.2), 0.5, material_center));
-  world.add(make_shared<sphere>(point3(-1, 0, -1), 0.5, material_left));
-  world.add(make_shared<sphere>(point3(1, -0, -1), 0.5, material_right));
+  world.add(make_shared<sphere>(point3(0, -0, -1.2), 0.5, material_solid));
+  world.add(make_shared<sphere>(point3(1, 0, -1), 0.5, material_metal));
+  world.add(
+      make_shared<sphere>(point3(-1, -0, -1), 0.5, material_dielectric_outer));
+  world.add(
+      make_shared<sphere>(point3(-1, -0, -1), 0.4, material_dielectric_inner));
 
   camera cam;
   cam.ratio = 16.0 / 9.0;
   cam.image_width = 400;
-  cam.sample_per_pixel = 500;
+  cam.sample_per_pixel = 300;
   cam.max_depth = 50;
+
+  cam.vfov = 20;
+  cam.lookfrom = point3(-2, 2, 1);
+  cam.lookat = point3(0, 0, -1);
+  cam.vup = vec3(0, 1, 0);
 
   cam.render(world);
   return 0;
