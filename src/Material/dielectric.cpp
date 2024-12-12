@@ -1,4 +1,5 @@
 #include "Material/dielectric.h"
+#include "utils.h"
 
 dielectric::dielectric(double r) : reflexion_index(r) {};
 bool dielectric::scatter(const ray& r, const hit_record& rec,
@@ -18,7 +19,7 @@ bool dielectric::scatter(const ray& r, const hit_record& rec,
 
   vec3 direction;
 
-  if (cant_refract) {
+  if (cant_refract || reflectance(cos_theta, ri) > utils::random_double()) {
     direction = geometry::reflect(direction_unit, rec.normal);
   } else {
     direction = geometry::refract(direction_unit, rec.normal, ri);
