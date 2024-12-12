@@ -5,7 +5,10 @@ hittable_list::hittable_list() {}
 hittable_list::hittable_list(shared_ptr<hittable> elem) { add(elem); }
 
 // Fonction qui ajoute un élément à la liste
-void hittable_list::add(shared_ptr<hittable> elem) { array.push_back(elem); }
+void hittable_list::add(shared_ptr<hittable> elem) {
+  array.push_back(elem);
+  bbox = aabb(bbox, elem->bounding_box());
+}
 
 // Fonction qui supprime tout ce qu'il y a dans la liste
 void hittable_list::clear() { array.clear(); }
@@ -28,3 +31,5 @@ bool hittable_list::hit(const ray& r, interval ray_t, hit_record& rec) const {
   }
   return hit_anything;
 }
+
+aabb hittable_list::bounding_box() const { return bbox; }

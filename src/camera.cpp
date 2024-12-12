@@ -92,8 +92,9 @@ ray camera::get_ray(int i, int j) const {
       defocus_angle <= 0 ? camera_center : defocus_disk_sample();
 
   vec3 ray_direction = pixel_sample_loc - ray_origin;
+  double ray_time = utils::random_double();
 
-  return ray(ray_origin, ray_direction);
+  return ray(ray_origin, ray_direction, ray_time);
 }
 
 // return une position random sur un carré de 1 sur 1 centré en 0

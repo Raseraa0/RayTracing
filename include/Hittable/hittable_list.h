@@ -12,9 +12,11 @@ using std::shared_ptr;
 
 class hittable_list : public hittable {
 private:
-  std::vector<shared_ptr<hittable>> array;
+  aabb bbox;
 
 public:
+  std::vector<shared_ptr<hittable>> array;
+
   hittable_list();
 
   hittable_list(shared_ptr<hittable> elem);
@@ -26,5 +28,7 @@ public:
   void clear();
 
   bool hit(const ray& r, interval ray_t, hit_record& rec) const override;
+
+  aabb bounding_box() const override;
 };
 #endif // !HITTABLE_LIST_H

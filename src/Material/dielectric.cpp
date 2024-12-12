@@ -25,7 +25,7 @@ bool dielectric::scatter(const ray& r, const hit_record& rec,
     direction = geometry::refract(direction_unit, rec.normal, ri);
   }
 
-  scattered = ray(rec.p, direction);
+  scattered = ray(rec.p, direction, r.time());
 
   return true;
 }

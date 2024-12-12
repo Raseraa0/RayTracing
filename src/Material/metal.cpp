@@ -11,7 +11,7 @@ bool metal::scatter(const ray& r, const hit_record& rec, color& attenuation,
   scattered_direction =
       geometry::unit_vector(scattered_direction) + fuzz * geometry::random_unit_vector();
 
-  scattered = ray(rec.p, scattered_direction);
+  scattered = ray(rec.p, scattered_direction, r.time());
   attenuation = albedo;
   return geometry::dot(scattered_direction, rec.normal) > 0;
 }

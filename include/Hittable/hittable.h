@@ -2,6 +2,7 @@
 #define HITTABLE_H
 
 #include "Utilities/interval.h"
+#include "aabb.h"
 #include "ray.h"
 #include <memory>
 
@@ -31,6 +32,8 @@ public:
   // Methode virtuel qui doit raccourci vima ller au debtu du
   // paragrapheforcément être overide (du au =0)
   virtual bool hit(const ray& r, interval ray_t, hit_record& rec) const = 0;
+
+  virtual aabb bounding_box() const = 0;
 };
 
 #endif // !HITTABLE_H
