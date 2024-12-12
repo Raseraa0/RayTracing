@@ -1,5 +1,5 @@
-#include "vec3.h"
-#include "utils.h"
+#include "Utilities/vec3.h"
+#include "Utilities/utils.h"
 
 vec3::vec3(double x, double y, double z) : vector{x, y, z} {}
 vec3::vec3() : vector{0, 0, 0} {}

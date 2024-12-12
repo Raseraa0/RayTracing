@@ -3,7 +3,7 @@
 
 #include "Hittable/hittable.h"
 #include "color.h"
-#include "vec3.h"
+#include "Utilities/vec3.h"
 
 class camera {
 public:

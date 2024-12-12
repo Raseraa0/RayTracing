@@ -1,5 +1,5 @@
 #include "Material/dielectric.h"
-#include "utils.h"
+#include "Utilities/utils.h"
 
 dielectric::dielectric(double r) : reflexion_index(r) {};
 bool dielectric::scatter(const ray& r, const hit_record& rec,

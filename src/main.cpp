@@ -4,7 +4,7 @@
 #include "camera.h"
 #include "Hittable/hittable_list.h"
 #include "Hittable/sphere.h"
-#include "vec3.h"
+#include "Utilities/vec3.h"
 
 #include <cmath>
 #include <memory>

@@ -3,7 +3,6 @@
 
 #include "hittable.h"
 #include "ray.h"
-#include "vec3.h"
 #include <memory>
 
 using std::shared_ptr;

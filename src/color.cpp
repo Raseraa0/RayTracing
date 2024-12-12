@@ -1,5 +1,5 @@
 #include "color.h"
-#include "interval.h"
+#include "Utilities/interval.h"
 #include <iostream>
 
 // Fonction qui permet d'écrire un pixel de couleur sur un sortie

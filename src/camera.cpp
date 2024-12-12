@@ -1,6 +1,6 @@
 #include "camera.h"
 #include "Material/material.h"
-#include "utils.h"
+#include "Utilities/utils.h"
 #include <ostream>
 
 // Renvoie la couleur touché par ce rayon

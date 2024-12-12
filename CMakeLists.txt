@@ -8,6 +8,7 @@ file(
   "src/*.cpp"
   "src/Hittable/*.cpp"
   "src/Material/*.cpp"
+  "src/Utilities/*.cpp"
 )
 
 file(
@@ -16,6 +17,7 @@ file(
   "include/*.h"
   "include/Hittable/*.h"
   "include/Material/*.h"
+  "include/Utilities/*.cpp"
 )
 set(CMAKE_CXX_COMPILER "/usr/bin/g++")
 

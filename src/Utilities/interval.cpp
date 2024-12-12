@@ -1,5 +1,5 @@
-#include "interval.h"
-#include "utils.h"
+#include "Utilities/interval.h"
+#include "Utilities/utils.h"
 
 interval::interval() : min(utils::infinity), max(-utils::infinity) {}
 
