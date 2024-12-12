@@ -12,7 +12,7 @@ public:
   metal(const color& a, double f);
 
   bool scatter(const ray& r, const hit_record& rec, color& attenuation,
-               ray& scattered) const;
+               ray& scattered) const override;
 };
 
 #endif // !METAL_H

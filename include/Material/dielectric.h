@@ -15,7 +15,7 @@ public:
   dielectric(double r);
 
   bool scatter(const ray& r, const hit_record& rec, color& attenuation,
-               ray& scattered) const;
+               ray& scattered) const override;
 };
 
 #endif // !DIELECTRIC_H

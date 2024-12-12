@@ -11,7 +11,7 @@ public:
   lambertian(const color& a);
 
   bool scatter(const ray& r, const hit_record& rec, color& attenuation,
-               ray& scattered) const;
+               ray& scattered) const override;
 };
 
 #endif // !LAMBERTIAN_H
