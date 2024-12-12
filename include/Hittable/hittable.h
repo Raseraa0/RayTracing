@@ -18,6 +18,8 @@ public:
   vec3 normal;
   bool front_face;
   shared_ptr<material> mat;
+  double u;
+  double v;
 
   // Pour des raison pratique, le vecteur normal doit toujours
   // aller à l'encontre du rayo

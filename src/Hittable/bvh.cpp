@@ -9,13 +9,13 @@
 #include <memory>
 #include <vector>
 
-//TODO peut etre un jour rajouter un consctructeur avec left et right, car c'est pas mal si l'utilisateur peut lui meme definir les bound
+// TODO peut etre un jour rajouter un consctructeur avec left et right, car
+// c'est pas mal si l'utilisateur peut lui meme definir les bound
 
 bvh_node::bvh_node(hittable_list l) : bvh_node(l.array, 0, l.array.size()) {}
 
 bvh_node::bvh_node(std::vector<shared_ptr<hittable>> array, size_t start,
                    size_t end) {
-
 
   // askip mieux de faire sans random... mais pas pour moi :p
   int choosed_axis = utils::random_int(0, 2);
