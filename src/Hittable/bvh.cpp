@@ -9,18 +9,16 @@
 #include <memory>
 #include <vector>
 
+//TODO peut etre un jour rajouter un consctructeur avec left et right, car c'est pas mal si l'utilisateur peut lui meme definir les bound
+
 bvh_node::bvh_node(hittable_list l) : bvh_node(l.array, 0, l.array.size()) {}
 
 bvh_node::bvh_node(std::vector<shared_ptr<hittable>> array, size_t start,
                    size_t end) {
 
-  bbox = aabb::empty;
-   
-  for (size_t i = start; i < end; i++){
-    bbox = aabb(bbox,array[i]->bounding_box());
-  }
 
-  int choosed_axis = bbox.longest_axis();
+  // askip mieux de faire sans random... mais pas pour moi :p
+  int choosed_axis = utils::random_int(0, 2);
 
   // comparator est de type fonction ici
   auto comparator = (choosed_axis == 0)   ? box_compare_x
@@ -42,7 +40,8 @@ bvh_node::bvh_node(std::vector<shared_ptr<hittable>> array, size_t start,
   // sinon, on sort puis on met la moitié dans chaque côté
   else {
 
-    // Ces deux ligne sont infame mais pas le choix our pas avoir de warning du au changement de type
+    // Ces deux ligne sont infame mais pas le choix our pas avoir de warning du
+    // au changement de type
     auto start_sort =
         std::begin(array) +
         static_cast<std::vector<std::shared_ptr<hittable>>::difference_type>(
@@ -57,6 +56,8 @@ bvh_node::bvh_node(std::vector<shared_ptr<hittable>> array, size_t start,
     left = make_shared<bvh_node>(array, start, mid);
     right = make_shared<bvh_node>(array, mid, end);
   }
+
+  bbox = aabb(left->bounding_box(), right->bounding_box());
 }
 
 bool bvh_node::hit(const ray& r, interval ray_t, hit_record& rec) const {

@@ -18,6 +18,8 @@ using std::make_shared;
 int main() {
   hittable_list world;
 
+  // srand((unsigned)time(0));
+
   auto ground_material = make_shared<lambertian>(color(0.5, 0.5, 0.5));
   world.add(make_shared<sphere>(point3(0, -1000, 0), 1000, ground_material));
 
@@ -63,8 +65,8 @@ int main() {
   camera cam;
 
   cam.ratio = 16.0 / 9.0;
-  cam.image_width = 1200;
-  cam.sample_per_pixel = 800;
+  cam.image_width = 400;
+  cam.sample_per_pixel = 100;
   cam.max_depth = 50;
 
   cam.vfov = 20;
@@ -74,6 +76,7 @@ int main() {
 
   cam.defocus_angle = 0.6;
   cam.focus_distance = 10.0;
+
 
   world = hittable_list(make_shared<bvh_node>(world));
 
