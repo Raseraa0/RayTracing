@@ -1,6 +1,3 @@
 img/*
 build/*
-src/test
-src/main
-image.ppm
 .cache/*
