@@ -6,5 +6,8 @@ solid_color::solid_color(double r, double g, double b)
     : albedo(color(r, g, b)) {}
 
 color solid_color::value(double u, double v, const point3& p) const {
+  (void) u;
+  (void) v;
+  (void) p;
   return albedo;
 }
