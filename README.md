@@ -8,7 +8,7 @@
 
 # 📌 Ray Tracing
 
-![Project preview](./TODO.png)
+![Project preview](./preview.png)
 
 ## 📝 Overview
 
